@@ -1,28 +1,29 @@
 {
     "name": "@ai42/sdk",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "files": [
-          "dist",
-          "README.md",
-          "LICENSE"
+        "dist",
+        "README.md",
+        "LICENSE"
     ],
-      
     "repository": {
         "url": "https://github.com/Kishore-MK/ai42-sdk"
     },
     "publishConfig": {
-          "access": "public"
+        "access": "public"
     },
     "scripts": {
         "build": "tsup",
         "dev": "tsup --watch",
         "prepublishOnly": "bun run build"
     },
-    "keywords": ["x402"],
+    "keywords": [
+        "x402"
+    ],
     "author": "keyaru",
     "license": "MIT",
     "devDependencies": {
