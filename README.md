@@ -6,7 +6,7 @@
 
 **True Pay-per-use AI API with automatic crypto payments via HTTP 402**
 
-[![npm version](https://img.shields.io/npm/v/ai42-sdk.svg)](https://www.npmjs.com/package/@ai42-sdk)
+[![npm version](https://img.shields.io/npm/v/ai42-sdk.svg)](https://www.npmjs.com/package/@ai42/sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
@@ -43,7 +43,7 @@ AI42 SDK provides seamless access to multiple AI models with automatic cryptocur
 ## Installation
 
 ```bash
-npm install @ai42-sdk
+npm install @ai42/sdk
 ```
 
 ### Core Peer Dependencies
@@ -67,8 +67,8 @@ npm install x402-fetch dotenv
 ### Browser Usage (Phantom Wallet)
 
 ```typescript
-import { AI42Client } from "@ai42-sdk";
-import { connectWallet } from "@ai42-sdk/wallet";
+import { AI42Client } from "@ai42/sdk";
+import { connectWallet } from "@ai42/sdk/wallet";
 
 // Connect wallet
 const wallet = await connectWallet();
@@ -95,7 +95,7 @@ console.log(`Cost: $${response.cost}`);
 ### Node.js Usage (Signer/Private Key)
 
 ```typescript
-import { AI42Client } from "@ai42-sdk";
+import { AI42Client } from "@ai42/sdk";
 import { config } from "dotenv";
 
 config();
@@ -251,7 +251,7 @@ console.log(response.content);
 ### Example 5: Error Handling
 
 ```typescript
-import { AI42Error } from "@ai42-sdk";
+import { AI42Error } from "@ai42/sdk";
 
 try {
   const response = await client.chat({
@@ -283,8 +283,8 @@ try {
     <div id="response"></div>
 
     <script type="module">
-      import { AI42Client } from "@ai42-sdk";
-      import { connectWallet } from "@ai42-sdk/wallet";
+      import { AI42Client } from "@ai42/sdk";
+      import { connectWallet } from "@ai42/sdk/wallet";
 
       let client;
 
@@ -401,7 +401,7 @@ import type {
   Priority,
   PaymentInfo,
   AI42Error,
-} from "@ai42-sdk";
+} from "@ai42/sdk";
 ```
 
 ---
