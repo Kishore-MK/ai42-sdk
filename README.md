@@ -4,9 +4,9 @@
 
 ![AI42 Logo](https://via.placeholder.com/150x150?text=AI42)
 
-**Pay-per-use AI API with automatic crypto payments via HTTP 402**
+**True Pay-per-use AI API with automatic crypto payments via HTTP 402**
 
-[![npm version](https://img.shields.io/npm/v/ai42-sdk.svg)](https://www.npmjs.com/package/ai42-sdk)
+[![npm version](https://img.shields.io/npm/v/ai42-sdk.svg)](https://www.npmjs.com/package/@ai42-sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
