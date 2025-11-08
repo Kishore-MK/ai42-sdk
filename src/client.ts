@@ -75,7 +75,7 @@ export class AI42Client {
         );
       }
   
-      return result;
+      return result as ChatResponse;
     } catch (error: any) {
       if (error instanceof AI42Error) {
         throw error;
