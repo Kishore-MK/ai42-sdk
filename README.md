@@ -31,28 +31,31 @@ AI42 SDK provides seamless access to multiple AI models with automatic cryptocur
 
 ### 🎯 Supported Models
 
-| Model | Provider | Identifier |
-|-------|----------|------------|
-| Llama 3.3 70B | Groq | `llama-3.3-70b-versatile` |
-| GPT OSS 120B | OpenAI | `openai/gpt-oss-120b` |
-| Gemini 2.5 Flash | Google | `gemini-2.5-flash` |
-| Gemini 2.5 Pro | Google | `gemini-2.5-pro` |
+| Model            | Provider | Identifier                |
+| ---------------- | -------- | ------------------------- |
+| Llama 3.3 70B    | Groq     | `llama-3.3-70b-versatile` |
+| GPT OSS 120B     | OpenAI   | `openai/gpt-oss-120b`     |
+| Gemini 2.5 Flash | Google   | `gemini-2.5-flash`        |
+| Gemini 2.5 Pro   | Google   | `gemini-2.5-pro`          |
 
 ---
 
 ## Installation
+
 ```bash
-npm install ai42-sdk
+npm install @ai42-sdk
 ```
 
-### Peer Dependencies
+### Core Peer Dependencies
 
 **For Browser:**
+
 ```bash
 npm install x402-solana
 ```
 
 **For Node.js:**
+
 ```bash
 npm install x402-fetch dotenv
 ```
@@ -62,52 +65,56 @@ npm install x402-fetch dotenv
 ## Quick Start
 
 ### Browser Usage (Phantom Wallet)
+
 ```typescript
-import { AI42Client } from 'ai42-sdk';
-import { connectWallet } from 'ai42-sdk/wallet';
+import { AI42Client } from "@ai42-sdk";
+import { connectWallet } from "@ai42-sdk/wallet";
 
 // Connect wallet
 const wallet = await connectWallet();
 
 // Create client
 const client = AI42Client.fromWallet(
-  { 
-    apiUrl: 'https://api.ai42.dev',
-    network: 'solana-devnet' 
+  {
+    apiUrl: "https://ai42.onrender.com",
+    network: "solana-devnet",
   },
   wallet
 );
 
 // Send a message
 const response = await client.chat({
-  message: 'Explain quantum computing',
-  model: 'llama-3.3-70b-versatile'
+  message: "Explain quantum computing",
+  model: "llama-3.3-70b-versatile",
 });
 
 console.log(response.content);
 console.log(`Cost: $${response.cost}`);
 ```
 
-### Node.js Usage (Private Key)
+### Node.js Usage (Signer/Private Key)
+
 ```typescript
-import { AI42Client } from 'ai42-sdk';
-import { config } from 'dotenv';
+import { AI42Client } from "@ai42-sdk";
+import { config } from "dotenv";
 
 config();
 
-// Create client with private key
-const client = await AI42Client.fromPrivateKey(
+// Create client with signer/private key
+const signer = await createSigner(config.network, privateKey);
+
+const client = await AI42Client.fromSigner(
   {
-    apiUrl: 'https://api.ai42.dev',
-    network: 'solana-devnet'
+    apiUrl: "https://api.ai42.dev",
+    network: "solana-devnet",
   },
-  process.env.PRIVATE_KEY!
+  signer
 );
 
 // Send a message
 const response = await client.chat({
-  message: 'Write a haiku about AI',
-  priority: 'fast'
+  message: "Write a haiku about AI",
+  priority: "fast",
 });
 
 console.log(response.content);
@@ -120,46 +127,53 @@ console.log(response.content);
 ### Client Creation
 
 #### Browser with Wallet
+
 ```typescript
 AI42Client.fromWallet(config: AI42Config, wallet: Wallet): AI42Client
 ```
 
 #### Node.js with Private Key
+
 ```typescript
-AI42Client.fromPrivateKey(config: AI42Config, privateKey: string): Promise<AI42Client>
+AI42Client.fromSigner(config: AI42Config, signer: Signer): Promise<AI42Client>
 ```
 
 ### Configuration
+
 ```typescript
 interface AI42Config {
   apiUrl: string;
-  network?: 'solana-mainnet' | 'solana-devnet' | 'base-sepolia';
+  network?: "solana-mainnet" | "solana-devnet" | "base-sepolia";
 }
 ```
 
 ### Chat Methods
 
 #### Basic Chat
+
 ```typescript
 client.chat(options: AI42ChatOptions): Promise<ChatResponse>
 ```
+
 ```typescript
 interface AI42ChatOptions {
   message: string;
   model?: ModelIdentifier;
-  priority?: 'fast' | 'quality' | 'cheap';
+  priority?: "fast" | "quality" | "cheap";
 }
 ```
 
 #### Chat with Specific Model
+
 ```typescript
 client.chatWithModel(
-  message: string, 
+  message: string,
   model: ModelIdentifier
 ): Promise<ChatResponse>
 ```
 
 #### Chat with Priority
+
 ```typescript
 client.chatWithPriority(
   message: string,
@@ -168,19 +182,20 @@ client.chatWithPriority(
 ```
 
 ### Response Format
+
 ```typescript
 interface ChatResponse {
-  content: string;              // AI response text
-  model: ModelIdentifier;       // Model used
+  content: string; // AI response text
+  model: ModelIdentifier; // Model used
   tokens: {
-    prompt: number;             // Input tokens
-    completion: number;         // Output tokens
-    total: number;              // Total tokens
+    prompt: number; // Input tokens
+    completion: number; // Output tokens
+    total: number; // Total tokens
   };
-  cost: number;                 // Cost in USD
-  cached: boolean;              // Whether response was cached
-  requestId: string;            // Unique request ID
-  timestamp: number;            // Unix timestamp
+  cost: number; // Cost in USD
+  cached: boolean; // Whether response was cached
+  requestId: string; // Unique request ID
+  timestamp: number; // Unix timestamp
 }
 ```
 
@@ -189,29 +204,32 @@ interface ChatResponse {
 ## Examples
 
 ### Example 1: Simple Question
+
 ```typescript
 const response = await client.chat({
-  message: 'What is the capital of France?'
+  message: "What is the capital of France?",
 });
 
 console.log(response.content); // "Paris is the capital of France..."
 ```
 
 ### Example 2: Code Generation
+
 ```typescript
 const response = await client.chatWithModel(
-  'Write a function to calculate fibonacci numbers',
-  'llama-3.3-70b-versatile'
+  "Write a function to calculate fibonacci numbers",
+  "llama-3.3-70b-versatile"
 );
 
 console.log(response.content);
 ```
 
 ### Example 3: Fast Response
+
 ```typescript
 const response = await client.chatWithPriority(
-  'Summarize the news today',
-  'fast'
+  "Summarize the news today",
+  "fast"
 );
 
 console.log(response.content);
@@ -219,70 +237,73 @@ console.log(`Responded in ${response.tokens.total} tokens`);
 ```
 
 ### Example 4: Quality over Speed
+
 ```typescript
 const response = await client.chat({
-  message: 'Explain the theory of relativity in detail',
-  priority: 'quality',
-  model: 'gemini-2.5-pro'
+  message: "Explain the theory of relativity in detail",
+  priority: "quality",
+  model: "gemini-2.5-pro",
 });
 
 console.log(response.content);
 ```
 
 ### Example 5: Error Handling
+
 ```typescript
-import { AI42Error } from 'ai42-sdk';
+import { AI42Error } from "@ai42-sdk";
 
 try {
   const response = await client.chat({
-    message: 'Hello AI'
+    message: "Hello AI",
   });
   console.log(response.content);
 } catch (error) {
   if (error instanceof AI42Error) {
     console.error(`Error [${error.code}]: ${error.message}`);
-    if (error.code === 'PAYMENT_FAILED') {
-      console.error('Check your wallet balance');
+    if (error.code === "PAYMENT_FAILED") {
+      console.error("Check your wallet balance");
     }
   }
 }
 ```
 
 ### Example 6: Browser Integration
+
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>AI42 Chat</title>
-</head>
-<body>
-  <button id="connect">Connect Wallet</button>
-  <input id="message" placeholder="Ask me anything..." />
-  <button id="send">Send</button>
-  <div id="response"></div>
+  <head>
+    <title>AI42 Chat</title>
+  </head>
+  <body>
+    <button id="connect">Connect Wallet</button>
+    <input id="message" placeholder="Ask me anything..." />
+    <button id="send">Send</button>
+    <div id="response"></div>
 
-  <script type="module">
-    import { AI42Client } from 'ai42-sdk';
-    import { connectWallet } from 'ai42-sdk/wallet';
+    <script type="module">
+      import { AI42Client } from "@ai42-sdk";
+      import { connectWallet } from "@ai42-sdk/wallet";
 
-    let client;
+      let client;
 
-    document.getElementById('connect').onclick = async () => {
-      const wallet = await connectWallet();
-      client = AI42Client.fromWallet(
-        { apiUrl: 'https://api.ai42.dev' },
-        wallet
-      );
-      alert('Wallet connected!');
-    };
+      document.getElementById("connect").onclick = async () => {
+        const wallet = await connectWallet();
+        client = AI42Client.fromWallet(
+          { apiUrl: "https://ai42.onrender.com" },
+          wallet
+        );
+        alert("Wallet connected!");
+      };
 
-    document.getElementById('send').onclick = async () => {
-      const message = document.getElementById('message').value;
-      const response = await client.chat({ message });
-      document.getElementById('response').innerText = response.content;
-    };
-  </script>
-</body>
+      document.getElementById("send").onclick = async () => {
+        const message = document.getElementById("message").value;
+        const response = await client.chat({ message });
+        document.getElementById("response").innerText = response.content;
+      };
+    </script>
+  </body>
 </html>
 ```
 
@@ -291,6 +312,7 @@ try {
 ## Environment Setup
 
 ### Node.js .env File
+
 ```env
 PRIVATE_KEY=your_solana_or_base_private_key_here
 API_URL=https://api.ai42.dev
@@ -300,6 +322,7 @@ NETWORK=solana-devnet
 ### Getting a Private Key
 
 **Solana:**
+
 ```bash
 solana-keygen new --outfile ~/.config/solana/id.json
 solana-keygen pubkey ~/.config/solana/id.json
@@ -316,28 +339,29 @@ Use MetaMask or any Ethereum wallet to export your private key.
 
 The SDK throws `AI42Error` with specific error codes:
 
-| Error Code | Description |
-|------------|-------------|
-| `INVALID_REQUEST` | Malformed request or invalid parameters |
-| `PAYMENT_REQUIRED` | Payment needed to proceed |
-| `PAYMENT_FAILED` | Payment transaction failed |
-| `MODEL_ERROR` | AI model returned an error |
-| `RATE_LIMIT` | Too many requests |
-| `INTERNAL_ERROR` | Unexpected error occurred |
+| Error Code         | Description                             |
+| ------------------ | --------------------------------------- |
+| `INVALID_REQUEST`  | Malformed request or invalid parameters |
+| `PAYMENT_REQUIRED` | Payment needed to proceed               |
+| `PAYMENT_FAILED`   | Payment transaction failed              |
+| `MODEL_ERROR`      | AI model returned an error              |
+| `RATE_LIMIT`       | Too many requests                       |
+| `INTERNAL_ERROR`   | Unexpected error occurred               |
+
 ```typescript
 try {
-  await client.chat({ message: 'Hello' });
+  await client.chat({ message: "Hello" });
 } catch (error) {
   if (error instanceof AI42Error) {
     switch (error.code) {
-      case 'PAYMENT_FAILED':
-        console.error('Payment issue:', error.message);
+      case "PAYMENT_FAILED":
+        console.error("Payment issue:", error.message);
         break;
-      case 'MODEL_ERROR':
-        console.error('AI model error:', error.message);
+      case "MODEL_ERROR":
+        console.error("AI model error:", error.message);
         break;
       default:
-        console.error('Error:', error.message);
+        console.error("Error:", error.message);
     }
   }
 }
@@ -347,26 +371,27 @@ try {
 
 ## Priority Guidelines
 
-| Priority | Use Case | Speed | Cost | Quality |
-|----------|----------|-------|------|---------|
-| `fast` | Quick responses, simple queries | ⚡⚡⚡ | $ | ⭐⭐ |
-| `quality` | Complex reasoning, detailed answers | ⚡ | $$$ | ⭐⭐⭐ |
-| `cheap` | Budget-conscious, simple tasks | ⚡⚡ | $ | ⭐⭐ |
+| Priority  | Use Case                            | Speed  | Cost | Quality |
+| --------- | ----------------------------------- | ------ | ---- | ------- |
+| `fast`    | Quick responses, simple queries     | ⚡⚡⚡ | $    | ⭐⭐    |
+| `quality` | Complex reasoning, detailed answers | ⚡     | $$$  | ⭐⭐⭐  |
+| `cheap`   | Budget-conscious, simple tasks      | ⚡⚡   | $    | ⭐⭐    |
 
 ---
 
 ## Network Support
 
-| Network | Chain | Mainnet | Testnet |
-|---------|-------|---------|---------|
-| Solana | Solana | `solana-mainnet` | `solana-devnet` |
-| Base | Ethereum L2 | `base-mainnet` | `base-sepolia` |
+| Network | Chain       | Mainnet          | Testnet         |
+| ------- | ----------- | ---------------- | --------------- |
+| Solana  | Solana      | `solana-mainnet` | `solana-devnet` |
+| Base    | Ethereum L2 | `base-mainnet`   | `base-sepolia`  |
 
 ---
 
 ## TypeScript Support
 
 Full TypeScript definitions included:
+
 ```typescript
 import type {
   AI42Config,
@@ -375,8 +400,8 @@ import type {
   ModelIdentifier,
   Priority,
   PaymentInfo,
-  AI42Error
-} from 'ai42-sdk';
+  AI42Error,
+} from "@ai42-sdk";
 ```
 
 ---
@@ -384,21 +409,27 @@ import type {
 ## FAQ
 
 ### Q: Do I need an API key?
+
 **A:** No! AI42 uses the X402 protocol for automatic payments. Just connect your wallet or provide a private key.
 
 ### Q: What cryptocurrencies are supported?
+
 **A:** Currently Solana (SOL/USDC) and Base (ETH/USDC).
 
 ### Q: How much does it cost?
+
 **A:** Pay-per-use pricing based on tokens consumed. Prices vary by model and priority. Check `response.cost` for exact costs.
 
 ### Q: Can I use this in production?
+
 **A:** Yes! Use `solana-mainnet` or `base-mainnet` for production. Start with testnets for development.
 
 ### Q: Is my private key safe?
+
 **A:** Your private key never leaves your machine. It's only used to sign payment transactions locally.
 
 ### Q: What if a payment fails?
+
 **A:** The SDK will throw a `PAYMENT_FAILED` error. Check your wallet balance and network connectivity.
 
 ---
@@ -409,7 +440,7 @@ Contributions welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+3. Commit your changes (`git commit -m 'Feat: Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
@@ -423,8 +454,6 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## Support
 
-- 📧 Email: support@ai42.dev
-- 💬 Discord: [Join our community](https://discord.gg/ai42)
 - 🐦 Twitter: [@ai42_dev](https://twitter.com/ai42_dev)
 - 📖 Docs: [docs.ai42.dev](https://docs.ai42.dev)
 
@@ -433,6 +462,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 ## Acknowledgments
 
 Built with:
+
 - [X402 Protocol](https://x402.org) - HTTP 402 payment standard
 - [x402-solana](https://github.com/x402/x402-solana) - Solana payment client
 - [x402-fetch](https://github.com/x402/x402-fetch) - Node.js payment wrapper
@@ -443,6 +473,6 @@ Built with:
 
 **Made with ❤️ by the AI42 Team**
 
-[Website](https://ai42.dev) • [Documentation](https://docs.ai42.dev) • [GitHub](https://github.com/ai42/sdk)
+[Website](https://ai42.dev) • [Documentation](https://docs.ai42.dev) • [GitHub](https://github.com/Kishore-MK/ai42-sdk)
 
 </div>
