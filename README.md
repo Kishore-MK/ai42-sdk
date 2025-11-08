@@ -105,7 +105,7 @@ const signer = await createSigner(config.network, privateKey);
 
 const client = await AI42Client.fromSigner(
   {
-    apiUrl: "https://api.ai42.dev",
+    apiUrl: "https://ai42.onrender.com",
     network: "solana-devnet",
   },
   signer
