@@ -1,11 +1,16 @@
 {
     "name": "@ai42/sdk",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
-    "files": ["dist"],
+    "files": [
+          "dist",
+          "README.md",
+          "LICENSE"
+    ],
+      
     "repository": {
         "url": "https://github.com/Kishore-MK/ai42-sdk"
     },
